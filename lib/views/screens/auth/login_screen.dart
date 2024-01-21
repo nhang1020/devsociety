@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:devsociety/controllers/AuthController.dart';
+import 'package:devsociety/provider/SocialSigInProvider.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
 import 'package:devsociety/views/components/button.dart';
 import 'package:devsociety/views/components/textField.dart';
@@ -218,7 +221,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 55,
                 height: 55,
                 radius: 50,
-                onPressed: () {},
+                onPressed: () {
+                  final provider =
+                      Provider.of<SocialSignInProvider>(context, listen: false);
+                  provider.googleLogin().then((value) {
+                    print(provider.user);
+                  });
+                },
                 icon: Icon(
                   UniconsLine.google,
                   size: 35,
@@ -275,7 +284,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           ),
-          SizedBox(height: 30),
+          ElevatedButton(
+              onPressed: () {
+                final provider =
+                    Provider.of<SocialSignInProvider>(context, listen: false);
+                provider.googleLogout().then((value) {
+                  print(provider.user);
+                });
+              },
+              child: Text("Logout"))
         ],
       ),
     );

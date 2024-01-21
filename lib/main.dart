@@ -1,4 +1,6 @@
+import 'package:devsociety/firebase_options.dart';
 import 'package:devsociety/provider/LocaleProvider.dart';
+import 'package:devsociety/provider/SocialSigInProvider.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
 import 'package:devsociety/views/screens/splash/splash_screen.dart';
 import 'package:devsociety/views/utils/variable.dart';
@@ -6,12 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() async{
-  
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ChangeNotifierProvider(
     create: (context) => LocaleProvider(),
-    builder: (context, child) => MyApp(),
+    builder: (context, child) => ChangeNotifierProvider(
+      create: (context) => SocialSignInProvider(),
+      builder: (context, child) => MyApp(),
+    ),
   ));
 }
 
