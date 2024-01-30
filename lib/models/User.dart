@@ -38,15 +38,18 @@ class User {
   String lastname;
   String email;
   dynamic password;
+  dynamic avatar;
   dynamic role;
-
+  dynamic type;
   User({
-     this.id,
+    this.id,
     required this.firstname,
     required this.lastname,
     required this.email,
     this.password,
-     this.role,
+    this.avatar,
+    this.role,
+    this.type,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -55,7 +58,9 @@ class User {
         lastname: json["lastname"],
         email: json["email"],
         password: json["password"],
+        avatar: json["avatar"],
         role: json["role"],
+        type: json["type"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,6 +69,8 @@ class User {
         "lastname": lastname,
         "email": email,
         "password": password,
+        "avatar": avatar,
         "role": role,
+        "type": type,
       };
 }

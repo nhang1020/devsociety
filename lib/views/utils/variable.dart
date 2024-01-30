@@ -2,11 +2,21 @@ import 'package:devsociety/provider/LocaleProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
+import 'package:diacritic/diacritic.dart';
 
 Color myColor = Color(0xff6666ff);
 AppLocalizations lang(BuildContext context) => AppLocalizations.of(context)!;
+final List<String> topics = [
+  "IMAGE",
+  "TEXT",
+  "VIDEO",
+  "QNA",
+];
+
+//func
 Size screen(BuildContext context) {
   return MediaQuery.of(context).size;
 }
@@ -14,6 +24,25 @@ Size screen(BuildContext context) {
 bool isSmallScreen(BuildContext context) {
   return MediaQuery.of(context).copyWith().size.width < 760;
 }
+
+String displayTime(BuildContext context, DateTime time) {
+  bool isEn = Provider.of<LocaleProvider>(context).isEn;
+  var diff = time.difference(DateTime.now());
+  if (diff.inHours < 24) {
+    if (diff.abs().inHours < 1) {
+      return "${diff.inMinutes.abs()} ${isEn && diff.abs().inMinutes > 1 ? lang(context).minute + 's' : lang(context).minute}";
+    }
+    return "${diff.abs().inHours} ${isEn && diff.abs().inHours > 1 ? lang(context).hour + 's' : lang(context).hour}";
+  } else if (diff.abs().inDays < 7) {
+    return "${diff.abs().inDays} ${lang(context).day} ${lang(context).ago}";
+  }
+
+  return isEn
+      ? DateFormat('MMM dd').format(time)
+      : "${time.day} tháng ${time.month}";
+}
+
+String formatString(String text) => removeDiacritics(text).toLowerCase();
 
 class LangDropDown extends StatelessWidget {
   const LangDropDown({super.key});

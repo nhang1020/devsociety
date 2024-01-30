@@ -1,5 +1,10 @@
+import 'package:devsociety/controllers/AuthController.dart';
 import 'package:devsociety/models/User.dart';
+import 'package:devsociety/provider/LocaleProvider.dart';
+import 'package:devsociety/provider/PostProvider.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
+import 'package:devsociety/views/components/button.dart';
+import 'package:devsociety/views/components/searchTextField.dart';
 import 'package:devsociety/views/screens/home/dashboard_screen.dart';
 import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +34,7 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
     List<Widget> _wigetOptions = [
       DashboardScreen(),
       Container(
@@ -42,6 +48,11 @@ class _IndexState extends State<Index> {
       Container(
         height: 300,
         color: Colors.blue.withOpacity(.1),
+        child: ElevatedButton(
+            onPressed: () async {
+              await AuthController(context: context).googleLogout();
+            },
+            child: Text("Logout")),
       ),
     ];
     return DefaultTabController(
@@ -62,7 +73,25 @@ class _IndexState extends State<Index> {
                   title: Hearder(),
                   scrolledUnderElevation: 12,
                   surfaceTintColor: Colors.transparent,
+                  toolbarHeight: 50,
                   actions: [
+                    MyButton(
+                      width: 50,
+                      color: Colors.transparent,
+                      label: localeProvider.locale.toUpperCase(),
+                      onPressed: () {
+                        localeProvider
+                            .toggleLocale(localeProvider.isEn ? 'vi' : 'en');
+                      },
+                    ),
+                    Container(
+                      width: 130,
+                      margin: EdgeInsets.only(top: 7, bottom: 7),
+                      decoration: BoxDecoration(
+                          color: myColor.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: MySearchTextField(listSearch: []),
+                    ),
                     IconButton(
                       onPressed: () {
                         themeProvider.themeMode == ThemeMode.dark

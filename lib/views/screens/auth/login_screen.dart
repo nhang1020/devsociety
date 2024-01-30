@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:devsociety/controllers/AuthController.dart';
 import 'package:devsociety/provider/SocialSigInProvider.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
@@ -8,6 +6,7 @@ import 'package:devsociety/views/components/textField.dart';
 import 'package:devsociety/views/screens/auth/signup_screen.dart';
 import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
@@ -25,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _password = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _loading = false;
+  late InAppWebViewController inApp;
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
@@ -221,12 +221,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: 55,
                 height: 55,
                 radius: 50,
-                onPressed: () {
-                  final provider =
-                      Provider.of<SocialSignInProvider>(context, listen: false);
-                  provider.googleLogin().then((value) {
-                    print(provider.user);
-                  });
+                onPressed: () async {
+                  await AuthController(context: context).googleLogin();
                 },
                 icon: Icon(
                   UniconsLine.google,
@@ -268,7 +264,36 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 55,
                 radius: 50,
                 padding: EdgeInsets.zero,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Scaffold(
+                        body: InAppWebView(
+                          initialUrlRequest: URLRequest(
+                              url: WebUri("https://github.com/login")),
+                          onWebViewCreated:
+                              (InAppWebViewController controller) {
+                            inApp = controller;
+                          },
+                          onLoadResource: (controller, resource) {
+                            if (resource.url
+                                .toString()
+                                .startsWith('https://github.com/login')) {
+                              // Xử lý response ở đây
+                              print(
+                                  'Received response from the web: ${resource}');
+                            }
+                          },
+                          onLoadStart:
+                              (InAppWebViewController controller, url) {},
+                          onLoadStop:
+                              (InAppWebViewController controller, url) {},
+                        ),
+                      ),
+                    ),
+                  );
+                },
                 icon: Icon(
                   UniconsLine.github,
                   size: 40,
@@ -285,12 +310,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
           ElevatedButton(
-              onPressed: () {
-                final provider =
-                    Provider.of<SocialSignInProvider>(context, listen: false);
-                provider.googleLogout().then((value) {
-                  print(provider.user);
-                });
+              onPressed: () async {
+                AuthController(context: context).googleLogout();
               },
               child: Text("Logout"))
         ],

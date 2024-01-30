@@ -17,6 +17,7 @@
     "hour": "giờ",
     "minute": "phút",
     "second": "giây",
+    "day":"ngày",
     "post": "Bài đăng",
     "username": "Tài khoản",
     "password": "Mật khẩu",
@@ -38,5 +39,15 @@
     "characters": "ký tự",
     "least": "ít nhất",
     "maximum": "tối đa",
-    "confirmationpasswordincorrect": "Mật khẩu xác nhận không đúng"
+    "confirmationpasswordincorrect": "Mật khẩu xác nhận không đúng",
+    "whatonyourmind": "Bạn đang nghĩ gì?",
+    "photo":"Hình ảnh",
+    "text":"Văn bản",
+    "snq":"Khảo sát",
+    "comment":"Bình luận",
+    "likes": "Lượt thích",
+    "selectmultiimages":"Chọn nhiều ảnh",
+    "post_v": "Đăng",
+    "createpost":"Tạo bài đăng",
+    "ago": "trước"
 }

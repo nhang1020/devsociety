@@ -17,6 +17,7 @@
     "hour": "hour",
     "minute": "minute",
     "second": "second",
+    "day":"day",
     "post": "Post",
     "username": "Username",
     "password": "Password",
@@ -38,7 +39,17 @@
     "characters": "characters",
     "least": "least",
     "maximum": "maximum",
-    "confirmationpasswordincorrect": "Confirmation password is incorrect"
+    "confirmationpasswordincorrect": "Confirmation password is incorrect",
+    "whatonyourmind": "What's on your mind?",
+    "photo":"Photo",
+    "text":"Text",
+    "snq":"Surveys and questions",
+    "comment":"Comment",
+    "likes": "Like",
+    "selectmultiimages":"Select multi images",
+    "post_v": "Post",
+    "createpost":"Create post",
+    "ago": "ago"
 }
 
 

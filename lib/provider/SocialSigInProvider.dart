@@ -1,34 +1,32 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 
-class SocialSignInProvider extends ChangeNotifier {
-  final googleSignIn = GoogleSignIn();
-  GoogleSignInAccount? _user;
-  GoogleSignInAccount get user => _user!;
-  Future googleLogin() async {
-    try {
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return;
-      _user = googleUser;
+// class SocialSignInProvider extends ChangeNotifier {
+//   final googleSignIn = GoogleSignIn(scopes: ['email']);
+//   GoogleSignInAccount? _user;
+//   GoogleSignInAccount? get user => _user;
 
-      final googleAuth = await googleUser.authentication;
+//   Future googleLogin() async {
+//     final googleUser = await googleSignIn.signIn();
+//     if (googleUser == null) return;
+//     _user = googleUser;
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      print(e);
-    }
+//     final googleAuth = await googleUser.authentication;
 
-    notifyListeners();
-  }
+//     final credential = GoogleAuthProvider.credential(
+//       accessToken: googleAuth.accessToken,
+//       idToken: googleAuth.idToken,
+//     );
 
-  Future googleLogout() async {
-    await googleSignIn.signOut();
+//     await FirebaseAuth.instance.signInWithCredential(credential);
 
-    notifyListeners();
-  }
-}
+//     notifyListeners();
+//   }
+
+//   Future googleLogout() async {
+//     await googleSignIn.signOut();
+
+//     notifyListeners();
+//   }
+// }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class MyButton extends StatefulWidget {
-  MyButton({
+  const MyButton({
     super.key,
     this.isGradient,
     this.width,
@@ -22,33 +22,36 @@ class MyButton extends StatefulWidget {
     this.padding,
     this.border,
     this.duration,
-    this.enabled,
+    this.enabled = true,
     this.maxLines,
     this.textAlign,
     this.labelStyle,
+    this.enabledColor,
+    this.enabledTextColor,
   });
-  bool? isGradient;
-  double? width;
-  double? height;
-  String? label;
-  double? fontSize;
-  Widget? icon;
-  Function()? onPressed;
-  double? radius;
-  List<Color>? colors;
-  List<BoxShadow>? boxShadows;
-  Color? textColor;
-  Widget? subfixIcon;
-  Color? color;
-  BorderRadius? borderRadius;
-  EdgeInsets? padding;
-  Border? border;
-  Duration? duration;
-  bool? enabled;
-  int? maxLines;
-  TextAlign? textAlign;
-  TextStyle? labelStyle;
-
+  final bool? isGradient;
+  final double? width;
+  final double? height;
+  final String? label;
+  final double? fontSize;
+  final Widget? icon;
+  final Function()? onPressed;
+  final double? radius;
+  final List<Color>? colors;
+  final List<BoxShadow>? boxShadows;
+  final Color? textColor;
+  final Widget? subfixIcon;
+  final Color? color;
+  final BorderRadius? borderRadius;
+  final EdgeInsets? padding;
+  final Border? border;
+  final Duration? duration;
+  final bool enabled;
+  final int? maxLines;
+  final TextAlign? textAlign;
+  final TextStyle? labelStyle;
+  final Color? enabledColor;
+  final Color? enabledTextColor;
   @override
   State<MyButton> createState() => _MyButtonState();
 }
@@ -67,8 +70,10 @@ class _MyButtonState extends State<MyButton> {
         borderRadius:
             widget.borderRadius ?? BorderRadius.circular(widget.radius ?? 10),
         gradient: LinearGradient(
-            colors: widget.enabled != null && widget.enabled == false
-                ? [myColor.withOpacity(.4), myColor.withOpacity(.4)]
+            colors: !widget.enabled
+                ? (widget.enabledColor != null
+                    ? [widget.enabledColor!, widget.enabledColor!]
+                    : [myColor.withOpacity(.4), myColor.withOpacity(.4)])
                 : (widget.isGradient != null && widget.isGradient == true
                     ? widget.colors ?? [myColor, myColor.withOpacity(.7)]
                     : [widget.color ?? myColor, widget.color ?? myColor])),
@@ -78,36 +83,51 @@ class _MyButtonState extends State<MyButton> {
         margin: EdgeInsets.zero,
         elevation: 0,
         child: InkWell(
-          onTap: widget.enabled != null && widget.enabled == false
-              ? null
-              : (widget.onPressed ?? null),
+          onTap: !widget.enabled ? null : (widget.onPressed ?? null),
           child: Container(
-            width: widget.width ?? 120,
+            width: widget.width,
             margin: widget.padding ??
                 EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
 
               children: [
                 widget.icon ?? Container(),
                 SizedBox(width: widget.label != null ? 5 : 0),
                 widget.label != null
-                    ? Expanded(
-                        child: Text(
-                          "${widget.label}",
-                          style: widget.labelStyle ??
-                              TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: widget.fontSize ?? 14,
-                                color: widget.textColor ??
-                                    Theme.of(context).cardColor,
-                              ),
-                          textAlign: widget.textAlign ?? TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: widget.maxLines ?? 1,
-                        ),
-                      )
+                    ? (widget.width != null
+                        ? Expanded(
+                            child: Text(
+                              "${widget.label}",
+                              style: widget.labelStyle ??
+                                  TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: widget.fontSize ?? 14,
+                                    color: widget.enabled
+                                        ? (widget.textColor ?? Colors.white)
+                                        : widget.enabledTextColor,
+                                  ),
+                              textAlign: widget.textAlign ?? TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: widget.maxLines ?? 1,
+                            ),
+                          )
+                        : Text(
+                            "${widget.label}",
+                            style: widget.labelStyle ??
+                                TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: widget.fontSize ?? 14,
+                                  color: widget.enabled
+                                      ? (widget.textColor ?? Colors.white)
+                                      : widget.enabledTextColor,
+                                ),
+                            textAlign: widget.textAlign ?? TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: widget.maxLines ?? 1,
+                          ))
                     : SizedBox(),
                 SizedBox(width: widget.label != null ? 5 : 0),
                 widget.subfixIcon ?? SizedBox(),

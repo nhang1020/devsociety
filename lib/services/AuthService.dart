@@ -4,29 +4,8 @@ import 'package:devsociety/models/User.dart';
 import 'package:devsociety/utils/response.dart';
 import 'package:devsociety/utils/variable.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  Future<void> saveLocalAccount(UserDTO account) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("account", '${jsonEncode(account)}');
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<UserDTO?> getLocalAccount() async {
-    UserDTO? account;
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var data = prefs.getString("account");
-      account = UserDTOFromJson(data!);
-    } catch (e) {
-      return null;
-    }
-    return account;
-  }
 
   Future<Response> login(String userName, String password) async {
     try {
@@ -41,9 +20,9 @@ class AuthService {
 
       return Response(
         statusCode: response.statusCode,
-        data: response.statusCode == 403
-            ? null
-            : UserDTO.fromJson(jsonDecode(response.body)),
+        data: response.statusCode == 200
+            ? UserDTO.fromJson(jsonDecode(response.body))
+            : null,
       );
     } catch (e) {
       print(e);
@@ -51,24 +30,27 @@ class AuthService {
     }
   }
 
-  Future<Response> signup(User user) async {
+  Future<Response> signup(User user, {String? type}) async {
     try {
       var response = await http.post(
         Uri.parse("${API.server}/auth/signup"),
-        headers: {"Content-Type": "application/json"},
+        headers: API.headerContentType,
         body: json.encode({
           "firstName": user.firstname,
           "lastName": user.lastname,
           "email": user.email,
           "password": user.password,
+          "avatar": user.avatar,
+          "type": type
         }),
+        
       );
 
       return Response(
-        statusCode: response.statusCode,
-        data: response.statusCode == 403
-            ? null
-            : UserDTO.fromJson(jsonDecode(response.body)).user,
+        statusCode: response.body != "" ? response.statusCode : 409,
+        data: response.statusCode == 200 && response.body != ""
+            ? UserDTO.fromJson(jsonDecode(response.body))
+            : null,
       );
     } catch (e) {
       print(e);
