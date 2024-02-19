@@ -30,7 +30,7 @@ class _FriendStoryState extends State<FriendStory> {
           width: 100,
           margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
               colors: [myColor, myColor.withOpacity(.1), Colors.cyan],
               begin: Alignment.bottomLeft,
@@ -42,11 +42,11 @@ class _FriendStoryState extends State<FriendStory> {
             margin: EdgeInsets.all(2.5),
             decoration: BoxDecoration(
               color: Theme.of(context).canvasColor,
-              borderRadius: BorderRadius.circular(13),
+              borderRadius: BorderRadius.circular(18),
             ),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
                   image: AssetImage(_images[widget.i]),
                   fit: BoxFit.cover,

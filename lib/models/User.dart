@@ -7,6 +7,7 @@ import 'dart:convert';
 UserDTO UserDTOFromJson(String str) => UserDTO.fromJson(json.decode(str));
 
 String UserDTOToJson(UserDTO data) => json.encode(data.toJson());
+User userFromJson(String str) => User.fromJson(json.decode(str));
 
 class UserDTO {
   User user;
@@ -34,9 +35,9 @@ class UserDTO {
 
 class User {
   dynamic id;
-  String firstname;
-  String lastname;
-  String email;
+  dynamic firstname;
+  dynamic lastname;
+  dynamic email;
   dynamic password;
   dynamic avatar;
   dynamic role;

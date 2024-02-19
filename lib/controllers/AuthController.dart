@@ -81,7 +81,6 @@ class AuthController {
   Future googleLogin() async {
     final googleUser = await GoogleSignIn(scopes: ['email']).signIn();
     if (googleUser == null) return;
-
     final googleAuth = await googleUser.authentication;
 
     final credential = fba.GoogleAuthProvider.credential(

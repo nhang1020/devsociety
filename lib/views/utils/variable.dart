@@ -1,5 +1,6 @@
 import 'package:devsociety/provider/LocaleProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -28,13 +29,13 @@ bool isSmallScreen(BuildContext context) {
 String displayTime(BuildContext context, DateTime time) {
   bool isEn = Provider.of<LocaleProvider>(context).isEn;
   var diff = time.difference(DateTime.now());
-  if (diff.inHours < 24) {
+  if (diff.inHours.abs() < 24) {
     if (diff.abs().inHours < 1) {
       return "${diff.inMinutes.abs()} ${isEn && diff.abs().inMinutes > 1 ? lang(context).minute + 's' : lang(context).minute}";
     }
     return "${diff.abs().inHours} ${isEn && diff.abs().inHours > 1 ? lang(context).hour + 's' : lang(context).hour}";
   } else if (diff.abs().inDays < 7) {
-    return "${diff.abs().inDays} ${lang(context).day} ${lang(context).ago}";
+    return "${diff.abs().inDays} ${isEn && diff.abs().inHours > 1 ? lang(context).day + 's' : lang(context).day} ${lang(context).ago}";
   }
 
   return isEn
@@ -42,7 +43,28 @@ String displayTime(BuildContext context, DateTime time) {
       : "${time.day} tháng ${time.month}";
 }
 
+class Loading extends StatelessWidget {
+  const Loading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SpinKitThreeBounce(
+        color: myColor.withOpacity(.7),
+        size: 30,
+      ),
+    );
+  }
+}
+
 String formatString(String text) => removeDiacritics(text).toLowerCase();
+List stringToList(String string) {
+  try {
+    return string.split(', ');
+  } catch (e) {
+    return [];
+  }
+}
 
 class LangDropDown extends StatelessWidget {
   const LangDropDown({super.key});

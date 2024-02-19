@@ -2,6 +2,7 @@ import 'package:devsociety/controllers/PostController.dart';
 import 'package:devsociety/models/Post.dart';
 import 'package:devsociety/provider/PostProvider.dart';
 import 'package:devsociety/provider/UserProvider.dart';
+import 'package:devsociety/services/DriveService.dart';
 import 'package:devsociety/views/components/button.dart';
 import 'package:devsociety/views/screens/home/widgets/page_choose_image.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +17,47 @@ class PageCreatePost extends StatefulWidget {
   State<PageCreatePost> createState() => _PageCreatePostState();
 }
 
-class _PageCreatePostState extends State<PageCreatePost> {
+class _PageCreatePostState extends State<PageCreatePost>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   int _selectedIndex = 0;
+  final _driveService = DriveService();
+  List<String> _fileIds = [];
 
   TextEditingController _titleController = TextEditingController();
   bool enabled() =>
       Provider.of<PostProvider>(context, listen: false).content != null;
+
+  Future<void> createPost(int authorId) async {
+    try {
+      final postProvider = Provider.of<PostProvider>(context, listen: false);
+      _fileIds = await _driveService.uploadFiles(postProvider.content);
+      if (_fileIds.isNotEmpty) {
+        Post? resPost = await PostController().createPost(
+          new Post(
+            author: authorId,
+            topic: topics[_selectedIndex],
+            title: _titleController.text.toString(),
+            content: _fileIds.join(', '),
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          ),
+        );
+        Navigator.pop(context);
+        if (resPost != null) {
+          postProvider.addPostToList(resPost);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
+    super.build(context);
     final userProvider =
         Provider.of<UserProvider>(context, listen: false).userDTO.user;
     List<Widget> _widgetOptions = [
@@ -34,7 +67,7 @@ class _PageCreatePostState extends State<PageCreatePost> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              child: Text("1"),
+              child: Text(userProvider.firstname),
             ),
           ],
         ),
@@ -76,24 +109,11 @@ class _PageCreatePostState extends State<PageCreatePost> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: MyButton(
-                      label: lang(context).post_v.toUpperCase(),
-                      enabled: enabled(),
-                      enabledColor: Colors.grey.withOpacity(.1),
-                      enabledTextColor: Colors.grey,
-                      radius: 15,
-                      onPressed: () async {
-                        await PostController().createPost(
-                          new Post(
-                            userId: userProvider.id,
-                            topic: topics[_selectedIndex],
-                            title: _titleController.text.toString(),
-                            content: postProvider.content,
-                            createdAt: DateTime.now(),
-                            updatedAt: DateTime.now(),
-                          ),
-                        );
-                      },
-                    ),
+                        label: lang(context).post_v.toUpperCase(),
+                        enabledColor: Colors.grey.withOpacity(.1),
+                        enabledTextColor: Colors.grey,
+                        radius: 15,
+                        onPressed: () => createPost(userProvider.id)),
                   ),
                 ],
               ),
@@ -120,18 +140,6 @@ class _PageCreatePostState extends State<PageCreatePost> {
               ),
             ),
           ),
-          // SliverAppBar(
-          //   automaticallyImplyLeading: false,
-          //   pinned: true,
-          //   snap: false,
-          //   floating: false,
-          //   scrolledUnderElevation: 0,
-          //   expandedHeight: 60,
-          //   backgroundColor: Theme.of(context).canvasColor,
-          //   toolbarHeight: 50,
-          //   actions: [
-          //   ],
-          // ),
           SliverList(
             delegate: SliverChildListDelegate(
               [

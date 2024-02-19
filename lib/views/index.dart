@@ -23,8 +23,21 @@ class _IndexState extends State<Index> {
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent -
+              _scrollController.position.pixels <=
+          100) {
+        loadMorePosts();
+      }
+    });
   }
 
+  loadMorePosts() async {
+    final postProvider = Provider.of<PostProvider>(context, listen: false);
+    postProvider.getPosts();
+  }
+
+  ScrollController _scrollController = ScrollController();
   List<IconData> _icons = [
     UniconsLine.estate,
     UniconsLine.airplay,
@@ -60,6 +73,7 @@ class _IndexState extends State<Index> {
       child: Scaffold(
         body: SafeArea(
           child: NestedScrollView(
+            controller: _scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverOverlapAbsorber(
                 handle:
@@ -75,10 +89,8 @@ class _IndexState extends State<Index> {
                   surfaceTintColor: Colors.transparent,
                   toolbarHeight: 50,
                   actions: [
-                    MyButton(
-                      width: 50,
-                      color: Colors.transparent,
-                      label: localeProvider.locale.toUpperCase(),
+                    TextButton(
+                      child: Text(localeProvider.locale.toUpperCase()),
                       onPressed: () {
                         localeProvider
                             .toggleLocale(localeProvider.isEn ? 'vi' : 'en');

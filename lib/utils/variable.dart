@@ -5,10 +5,10 @@ class API {
   static Map<String, String> headerContentType = {
     "Content-Type": "application/json"
   };
-    static Map<String, String> headerContentTypes(String token) => {
-    "Content-Type": "application/json",
-    'Authorization': 'Bearer $token'
-  };
+  static Map<String, String> headerContentTypes(String token) => {
+        "Content-Type": "application/json;charset=UTF-8",
+        'Authorization': 'Bearer $token'
+      };
   static Map<String, String> headerAuthorize(String token) =>
       {'Authorization': 'Bearer $token'};
 }

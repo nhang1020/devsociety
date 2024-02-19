@@ -22,15 +22,17 @@ class _PageChoosImageState extends State<PageChoosImage> {
     var files = await ImageHelper().pickImageByGallery(mutiple: multiple);
 
     if (files.isNotEmpty) {
+      final postProvider = Provider.of<PostProvider>(context, listen: false);
       setState(() {
         images = images + files.map((image) => File(image.path)).toList();
       });
+      // postProvider.updateContent(images.map((e) => e.path).join(', '));
+      postProvider.updateContent(images);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
     bool _isEven = images.length % 2 == 0;
     return Container(
       width: screen(context).width,
@@ -131,9 +133,7 @@ class _PageChoosImageState extends State<PageChoosImage> {
                   )
                 : InkWell(
                     onTap: () {
-                      chooseImage().then((value) {
-                        postProvider.updateContent("asd");
-                      });
+                      chooseImage();
                     },
                     child: Stack(
                       alignment: Alignment.center,

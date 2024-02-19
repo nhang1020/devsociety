@@ -6,7 +6,7 @@ import 'package:devsociety/utils/variable.dart';
 import 'package:http/http.dart' as http;
 
 class PostController {
-  Future<void> createPost(Post post) async {
+  Future<Post?> createPost(Post post) async {
     try {
       var response = await http.post(
         Uri.parse("${API.server}/post"),
@@ -15,13 +15,34 @@ class PostController {
           "topic": post.topic,
           "title": post.title,
           "content": post.content,
-          "user_id": post.userId
+          "userId": post.author
         }),
       );
-      print(response.statusCode);
-      print(LocalPreference.token);
+      if (response.statusCode == 201) {
+        Post post = Post.fromJson(jsonDecode(response.body));
+        return post;
+      }
     } catch (e) {
       print(e);
+    }
+    return null;
+  }
+
+  Future<List<Post>> getPosts(int offset, int limit) async {
+    List<Post> listPosts = [];
+    try {
+      var response = await http.get(
+        Uri.parse("${API.server}/post/$offset/$limit"),
+        headers: API.headerContentTypes(LocalPreference.token),
+      );
+      if (response.statusCode == 200) {
+        listPosts = listPostFromJson(response.body);
+      }
+
+      return listPosts;
+    } catch (e) {
+      print("->$e");
+      return listPosts;
     }
   }
 }
