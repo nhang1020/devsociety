@@ -57,6 +57,7 @@ class Loading extends StatelessWidget {
   }
 }
 
+
 String formatString(String text) => removeDiacritics(text).toLowerCase();
 List stringToList(String string) {
   try {

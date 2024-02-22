@@ -1,7 +1,7 @@
 import 'package:devsociety/provider/PostProvider.dart';
 import 'package:devsociety/services/DriveService.dart';
 import 'package:devsociety/views/components/imageSlideShow.dart';
-import 'package:devsociety/views/components/myImage.dart';
+import 'package:devsociety/views/components/videoPlayer.dart';
 import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
 import 'package:devsociety/views/components/button.dart';
@@ -100,12 +100,16 @@ class _ListPostState extends State<ListPost> {
                                 for (int i = 0;
                                     i < stringToList(post.content).length;
                                     i++)
-                                  MyImage(
-                                      imageUrl: DriveService.displayDrivePhoto(
-                                          stringToList(post.content)[i])),
+                                  DriveService.displayDrivePhoto(
+                                      stringToList(post.content)[i]),
                               ])
-                            : SizedBox(),
+                            : (post.topic == topics[2]
+                                ? MyVideo(
+                                    path:
+                                        "https://drive.google.com/uc?export=download&id=${post.content}")
+                                : SizedBox()),
                         Container(
+                          margin: EdgeInsets.only(top: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

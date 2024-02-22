@@ -90,7 +90,7 @@ class _MySearchTextFieldState extends State<MySearchTextField> {
       viewBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
       viewElevation: 0,
       viewHeaderHintStyle: TextStyle(color: Colors.grey),
-      barHintText: widget.hintText ?? 'Tìm kiếm...',
+      barHintText: widget.hintText ?? "${lang(context).search}...",
       barPadding: MaterialStatePropertyAll(EdgeInsets.zero),
       barLeading: Padding(
         padding: EdgeInsets.only(right: 10, left: 10, top: 3),

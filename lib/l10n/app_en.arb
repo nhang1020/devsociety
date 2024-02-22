@@ -22,7 +22,7 @@
     "username": "Username",
     "password": "Password",
     "other": "Other",
-    "idonthaveaccount": "I don't have an account",
+    "idonthaveaccount": "I don`t have an account",
     "ihavealreadyaccount": "I already have an account",
     "firstname": "First Name",
     "lastname": "Last Name",
@@ -40,7 +40,7 @@
     "least": "least",
     "maximum": "maximum",
     "confirmationpasswordincorrect": "Confirmation password is incorrect",
-    "whatonyourmind": "What's on your mind?",
+    "whatonyourmind": "What`s on your mind?",
     "photo":"Photo",
     "text":"Text",
     "snq":"Surveys and questions",
@@ -49,7 +49,8 @@
     "selectmultiimages":"Select multi images",
     "post_v": "Post",
     "createpost":"Create post",
-    "ago": "ago"
+    "ago": "ago",
+    "search":"Search"
 }
 
 

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:devsociety/config/ImageHelper.dart';
 import 'package:devsociety/provider/PostProvider.dart';
@@ -8,19 +9,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
-class PageChoosImage extends StatefulWidget {
-  const PageChoosImage({super.key});
+class PageChooseImage extends StatefulWidget {
+  const PageChooseImage({super.key});
 
   @override
-  State<PageChoosImage> createState() => _PageChoosImageState();
+  State<PageChooseImage> createState() => _PageChooseImageState();
 }
 
-class _PageChoosImageState extends State<PageChoosImage> {
+class _PageChooseImageState extends State<PageChooseImage> {
   List<File> images = [];
+  Uint8List? imageList;
+  Future<File> uint8ListToFile(Uint8List uint8list, String filePath) async {
+    File file = await uint8ListToFile(uint8list, filePath);
+    return file;
+  }
 
   Future<void> chooseImage({bool multiple = false}) async {
     var files = await ImageHelper().pickImageByGallery(mutiple: multiple);
-
     if (files.isNotEmpty) {
       final postProvider = Provider.of<PostProvider>(context, listen: false);
       setState(() {
@@ -188,6 +193,12 @@ class _PageChoosImageState extends State<PageChoosImage> {
                       },
                     ),
                   ],
+                )
+              : SizedBox(),
+          imageList != null
+              ? Image.memory(
+                  imageList!,
+                  fit: BoxFit.cover,
                 )
               : SizedBox(),
           SizedBox(height: 30),

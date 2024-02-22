@@ -4,7 +4,9 @@ import 'package:devsociety/provider/LocaleProvider.dart';
 import 'package:devsociety/provider/PostProvider.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
 import 'package:devsociety/views/components/button.dart';
+import 'package:devsociety/views/components/loading.dart';
 import 'package:devsociety/views/components/searchTextField.dart';
+import 'package:devsociety/views/screens/chat/chat_home_screen.dart';
 import 'package:devsociety/views/screens/home/dashboard_screen.dart';
 import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +15,9 @@ import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 class Index extends StatefulWidget {
-  const Index({super.key, required this.account});
+  const Index({super.key, required this.account, this.initIndex = 0});
   final UserDTO account;
+  final int initIndex;
   @override
   State<Index> createState() => _IndexState();
 }
@@ -53,11 +56,11 @@ class _IndexState extends State<Index> {
       Container(
         height: 300,
         color: Colors.amber.withOpacity(.1),
+        child: MyButton(
+          onPressed: () {},
+        ),
       ),
-      Container(
-        height: 2000,
-        color: Colors.redAccent.withOpacity(.1),
-      ),
+      ChatHomeScreen(),
       Container(
         height: 300,
         color: Colors.blue.withOpacity(.1),
@@ -70,6 +73,7 @@ class _IndexState extends State<Index> {
     ];
     return DefaultTabController(
       length: 4,
+      initialIndex: widget.initIndex,
       child: Scaffold(
         body: SafeArea(
           child: NestedScrollView(
@@ -82,6 +86,7 @@ class _IndexState extends State<Index> {
                   backgroundColor: Theme.of(context).canvasColor,
                   pinned: true,
                   snap: true,
+                  automaticallyImplyLeading: false,
                   floating: true,
                   elevation: 0,
                   title: Hearder(),

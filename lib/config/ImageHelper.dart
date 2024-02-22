@@ -2,14 +2,14 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageHelper {
-   final ImagePicker _imagePicker;
-   final ImageCropper _imageCropper;
+  final ImagePicker _imagePicker;
+  final ImageCropper _imageCropper;
 
-   ImageHelper({ImagePicker? imagePicker, ImageCropper? imageCropper})
+  ImageHelper({ImagePicker? imagePicker, ImageCropper? imageCropper})
       : _imagePicker = imagePicker ?? ImagePicker(),
         _imageCropper = imageCropper ?? ImageCropper();
 
-   Future<List<XFile>> pickImageByGallery({
+  Future<List<XFile>> pickImageByGallery({
     ImageSource source = ImageSource.gallery,
     int imageQuality = 50,
     bool mutiple = false,

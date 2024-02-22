@@ -1,13 +1,11 @@
 
 import 'package:devsociety/controllers/LocalPreference.dart';
 import 'package:devsociety/models/User.dart';
-import 'package:devsociety/provider/PostProvider.dart';
 import 'package:devsociety/views/screens/home/widgets/page_create_post.dart';
 import 'package:devsociety/views/screens/home/widgets/post_list.dart';
 import 'package:devsociety/views/screens/home/widgets/user_story.dart';
 import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
