@@ -11,12 +11,11 @@ class MyVideo extends StatefulWidget {
 }
 
 class _VideoPLayerState extends State<MyVideo> {
-  ChewieController? _chewieController;
+  late ChewieController _chewieController;
   VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("");
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _videoPlayerController =
         VideoPlayerController.networkUrl(Uri.parse(widget.path));
@@ -35,9 +34,16 @@ class _VideoPLayerState extends State<MyVideo> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      child: _chewieController != null
+      child: _videoPlayerController.value.isInitialized
           ? Container(
               clipBehavior: Clip.hardEdge,
               // height: 400,
@@ -47,10 +53,10 @@ class _VideoPLayerState extends State<MyVideo> {
               ),
               child: AspectRatio(
                 aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: Chewie(controller: _chewieController!),
+                child: Chewie(controller: _chewieController),
               ),
             )
-          : SizedBox(),
+          : Loading(),
     );
   }
 }

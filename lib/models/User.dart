@@ -8,7 +8,9 @@ UserDTO UserDTOFromJson(String str) => UserDTO.fromJson(json.decode(str));
 
 String UserDTOToJson(UserDTO data) => json.encode(data.toJson());
 User userFromJson(String str) => User.fromJson(json.decode(str));
-
+List<User> listUserFromJson(String str) {
+  return List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
+}
 class UserDTO {
   User user;
   String token;
@@ -39,6 +41,8 @@ class User {
   dynamic lastname;
   dynamic email;
   dynamic password;
+  dynamic address;
+  dynamic gender;
   dynamic avatar;
   dynamic role;
   dynamic type;
@@ -51,6 +55,8 @@ class User {
     this.avatar,
     this.role,
     this.type,
+    this.address,
+    this.gender,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -59,6 +65,8 @@ class User {
         lastname: json["lastname"],
         email: json["email"],
         password: json["password"],
+        address: json["address"],
+        gender: json["gender"],
         avatar: json["avatar"],
         role: json["role"],
         type: json["type"],
@@ -70,6 +78,8 @@ class User {
         "lastname": lastname,
         "email": email,
         "password": password,
+        "address": address,
+        "gender": gender,
         "avatar": avatar,
         "role": role,
         "type": type,

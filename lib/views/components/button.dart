@@ -90,9 +90,8 @@ class _MyButtonState extends State<MyButton> {
                 EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
-
               children: [
                 widget.icon ?? Container(),
                 SizedBox(width: widget.label != null ? 5 : 0),

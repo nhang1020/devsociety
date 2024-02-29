@@ -89,18 +89,5 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Future _showModalBottomSheet(Widget widget, {double? height}) {
-    return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      constraints:
-          BoxConstraints(maxHeight: height ?? screen(context).height - 30),
-      // showDragHandle: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      builder: (BuildContext context) {
-        return widget;
-      },
-    );
-  }
+ 
 }

@@ -50,5 +50,8 @@
     "post_v": "Đăng",
     "createpost":"Tạo bài đăng",
     "ago": "trước",
-    "search":"Tìm kiếm"
+    "search":"Tìm kiếm",
+    "kilo":"N",
+    "milion":"Tr",
+    "bilion":"T"
 }

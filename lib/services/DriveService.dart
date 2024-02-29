@@ -27,26 +27,32 @@ class DriveService {
     final folder = await _getOrCreateFolder(drive, "images");
 
     final uploadTasks = files.map((file) async {
-      final fileId = await _getFileID(drive, basename(file.path));
+      // final fileId = await _getFileID(drive, basename(file.path));
       final media = ga.Media(file.openRead(), file.lengthSync());
       final fileName = basename(file.path);
-
-      if (fileId == null) {
-        final res = await drive.files.create(
-          ga.File()
-            ..name = fileName
-            ..parents = [folder!],
-          uploadMedia: media,
-        );
-        return res.id!;
-      } else {
-        final res = await drive.files.update(
-          ga.File()..name = fileName,
-          fileId,
-          uploadMedia: media,
-        );
-        return res.id!;
-      }
+      final res = await drive.files.create(
+        ga.File()
+          ..name = "$fileName${DateTime.now().microsecondsSinceEpoch}"
+          ..parents = [folder!],
+        uploadMedia: media,
+      );
+      return res.id!;
+      // if (fileId == null) {
+      //   final res = await drive.files.create(
+      //     ga.File()
+      //       ..name = fileName
+      //       ..parents = [folder!],
+      //     uploadMedia: media,
+      //   );
+      //   return res.id!;
+      // } else {
+      //   final res = await drive.files.update(
+      //     ga.File()..name = fileName,
+      //     fileId,
+      //     uploadMedia: media,
+      //   );
+      //   return res.id!;
+      // }
     });
 
     final uploadedFileIds = await Future.wait(uploadTasks);

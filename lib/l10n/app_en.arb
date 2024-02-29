@@ -50,7 +50,10 @@
     "post_v": "Post",
     "createpost":"Create post",
     "ago": "ago",
-    "search":"Search"
+    "search":"Search",
+    "kilo":"K",
+    "milion":"M",
+    "bilion":"B"
 }
 
 

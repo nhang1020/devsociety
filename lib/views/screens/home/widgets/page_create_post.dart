@@ -5,6 +5,7 @@ import 'package:devsociety/provider/UserProvider.dart';
 import 'package:devsociety/services/DriveService.dart';
 import 'package:devsociety/views/components/button.dart';
 import 'package:devsociety/views/components/loading.dart';
+import 'package:devsociety/views/index.dart';
 import 'package:devsociety/views/screens/home/widgets/page_choose_image.dart';
 import 'package:devsociety/views/screens/home/widgets/page_choose_video.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _PageCreatePostState extends State<PageCreatePost>
       Provider.of<PostProvider>(context, listen: false).content != null;
 
   Future<void> createPost(int authorId) async {
-    showLoadingDialog(context, turn: true);
+    showLoadingDialog(context, turn: false);
     try {
       final postProvider = Provider.of<PostProvider>(context, listen: false);
       _fileIds = await _driveService.uploadFiles(postProvider.content);
@@ -55,8 +56,12 @@ class _PageCreatePostState extends State<PageCreatePost>
       }
     } catch (e) {
       print(e);
-    }finally{
-      Navigator.pop(context);
+    } finally {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Index(),
+          ));
     }
   }
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:devsociety/controllers/FirebaseController.dart';
 import 'package:devsociety/controllers/LocalPreference.dart';
 import 'package:devsociety/models/User.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
@@ -38,7 +39,7 @@ class AuthController {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Index(account: account),
+            builder: (context) => Index(),
           ),
         );
       } else if (res.statusCode == 403) {
@@ -117,7 +118,7 @@ class AuthController {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Index(account: account),
+          builder: (context) => Index(),
         ),
       );
     } else {
@@ -127,6 +128,7 @@ class AuthController {
   }
 
   Future googleLogout() async {
+    await FirebaseController.changeStatusUser(false);
     await GoogleSignIn().signOut();
     await LocalPreference().clearLocal(key: 'account');
     Navigator.pushReplacement(
@@ -142,7 +144,7 @@ class AuthController {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => Index(account: account),
+            builder: (context) => Index(),
           ));
     } else {
       Navigator.pushReplacement(

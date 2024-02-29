@@ -8,12 +8,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalPreference {
   static String token = "";
-  Future<void> saveLocalAccount(BuildContext context,UserDTO account) async {
+  Future<void> saveLocalAccount(BuildContext context, UserDTO account) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString("account", '${jsonEncode(account)}');
       token = await account.token;
-      Provider.of<UserProvider>(context, listen: false).setUserInfo(account);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUserInfo(account);
+      userProvider.setListUser(account.user.id);
     } catch (e) {
       print(e);
     }
@@ -26,7 +28,21 @@ class LocalPreference {
       var data = await prefs.getString("account");
       account = UserDTOFromJson(data!);
       token = account.token;
-      Provider.of<UserProvider>(context, listen: false).setUserInfo(account);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUserInfo(account);
+      userProvider.setListUser(account.user.id);
+    } catch (e) {
+      return null;
+    }
+    return account;
+  }
+  static Future<UserDTO?> localAccount() async {
+    UserDTO? account;
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var data = await prefs.getString("account");
+      account = UserDTOFromJson(data!);
+      token = account.token;
     } catch (e) {
       return null;
     }

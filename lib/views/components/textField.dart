@@ -14,18 +14,22 @@ class MyTextField extends StatefulWidget {
       this.error,
       this.maxLenght,
       this.minLenght,
-      this.isEmail = false});
+      this.isEmail = false,
+      this.subfixIcon,
+      this.keyboardType});
   final String? hintText;
   final TextEditingController? controller;
   final String? labelText;
   final bool isPassword;
   final Widget? prefixIcon;
+  final Widget? subfixIcon;
   final TextInputAction? textInputAction;
   final Function(String?)? onChanged;
   final String? error;
   final int? maxLenght;
   final int? minLenght;
   final bool isEmail;
+  final TextInputType? keyboardType;
   @override
   State<MyTextField> createState() => _MyTextFieldState();
 }
@@ -38,6 +42,7 @@ class _MyTextFieldState extends State<MyTextField> {
       obscureText: widget.isPassword && isViewPasword,
       controller: widget.controller,
       textInputAction: widget.textInputAction,
+      keyboardType: widget.keyboardType,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 10),
         enabledBorder: OutlineInputBorder(
@@ -62,7 +67,7 @@ class _MyTextFieldState extends State<MyTextField> {
         ),
         prefixIcon: widget.prefixIcon,
         prefixIconColor: Colors.grey,
-        suffixIcon: widget.isPassword
+        suffixIcon: widget.isPassword && widget.subfixIcon == null
             ? IconButton(
                 onPressed: () {
                   setState(() {
@@ -79,7 +84,7 @@ class _MyTextFieldState extends State<MyTextField> {
                         color: Colors.grey,
                       ),
               )
-            : null,
+            : widget.subfixIcon,
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(color: Colors.redAccent.shade100),
@@ -119,6 +124,7 @@ class _MyTextFieldState extends State<MyTextField> {
         }
         return null;
       },
+      // onEditingComplete: () {},
     );
   }
 }

@@ -1,8 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />  
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <application
-        android:label="devsociety"
+        android:label="DevSociety"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
@@ -33,5 +39,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.firebase.messaging.default_notification_id"
+            android:value="high_importance_channel"
+            android:resource="@drawable/launcher_icon"
+             />
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     </application>
 </manifest>

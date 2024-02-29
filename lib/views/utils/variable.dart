@@ -22,6 +22,11 @@ Size screen(BuildContext context) {
   return MediaQuery.of(context).size;
 }
 
+formatTime(DateTime time) {
+  String formattedTime = DateFormat('hh:mm').format(time);
+  return formattedTime;
+}
+
 bool isSmallScreen(BuildContext context) {
   return MediaQuery.of(context).copyWith().size.width < 760;
 }
@@ -43,20 +48,47 @@ String displayTime(BuildContext context, DateTime time) {
       : "${time.day} tháng ${time.month}";
 }
 
-class Loading extends StatelessWidget {
-  const Loading({super.key});
+String convertThousandNumber(number) {
+  try {
+    return NumberFormat.decimalPattern().format(number);
+  } catch (e) {
+    print(e);
+    return "0";
+  }
+}
 
+String roundedQuanlity(BuildContext context, number) {
+  try {
+    double num = double.parse(number.toString());
+    switch (num) {
+      case >= 1000 && < 1000000:
+        return "${(num / 1000).toStringAsFixed(1)} ${lang(context).kilo}";
+      case >= 1000000 && < 1000000000:
+        return "${(num / 1000000).toStringAsFixed(1)} ${lang(context).milion}";
+      case >= 1000000000:
+        return "${(num / 1000000000).toStringAsFixed(1)} ${lang(context).bilion}";
+      default:
+        return "${num.toStringAsFixed(0)}";
+    }
+  } catch (e) {
+    print(e);
+    return "0";
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({super.key, this.color});
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SpinKitThreeBounce(
-        color: myColor.withOpacity(.7),
+        color: color ?? myColor.withOpacity(.7),
         size: 30,
       ),
     );
   }
 }
-
 
 String formatString(String text) => removeDiacritics(text).toLowerCase();
 List stringToList(String string) {

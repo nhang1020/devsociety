@@ -27,7 +27,7 @@ class _ImageSlideShowState extends State<ImageSlideShow> {
       };
     } else {
       return {
-        "width": screen(context).width / 2 - 26,
+        "width": screen(context).width / 2 - 32,
         "height": widget.height / 2 - 5
       };
     }

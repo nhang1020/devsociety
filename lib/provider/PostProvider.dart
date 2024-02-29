@@ -39,6 +39,11 @@ class PostProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removePostFromList(Post post) {
+    _listPost.remove(post);
+    notifyListeners();
+  }
+
   void updateContent(dynamic content) {
     _content = content;
     notifyListeners();

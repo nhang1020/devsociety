@@ -2,8 +2,9 @@ import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
 
 class MyImage extends StatelessWidget {
-  const MyImage({super.key, required this.imageUrl});
+  const MyImage({super.key, required this.imageUrl, this.isAvatar = false});
   final String imageUrl;
+  final bool isAvatar;
   @override
   Widget build(BuildContext context) {
     // final headers = Provider.of<PostProvider>(context).driveHeader;
@@ -13,7 +14,9 @@ class MyImage extends StatelessWidget {
       imageErrorBuilder: (context, error, stackTrace) {
         return Center(
           child: Image.asset(
-            'assets/icons/image_notfound.png',
+            isAvatar
+                ? 'assets/icons/developer_96px.png'
+                : 'assets/icons/image_notfound.png',
             fit: BoxFit.cover,
             color: myColor.withOpacity(.5),
           ),

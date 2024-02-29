@@ -1,10 +1,11 @@
+import 'package:devsociety/config/FirebaseNotification.dart';
 import 'package:devsociety/controllers/AuthController.dart';
-import 'package:devsociety/models/User.dart';
+import 'package:devsociety/controllers/FirebaseController.dart';
 import 'package:devsociety/provider/LocaleProvider.dart';
 import 'package:devsociety/provider/PostProvider.dart';
 import 'package:devsociety/provider/ThemeProvider.dart';
+import 'package:devsociety/services/FCMService.dart';
 import 'package:devsociety/views/components/button.dart';
-import 'package:devsociety/views/components/loading.dart';
 import 'package:devsociety/views/components/searchTextField.dart';
 import 'package:devsociety/views/screens/chat/chat_home_screen.dart';
 import 'package:devsociety/views/screens/home/dashboard_screen.dart';
@@ -15,14 +16,13 @@ import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 class Index extends StatefulWidget {
-  const Index({super.key, required this.account, this.initIndex = 0});
-  final UserDTO account;
+  const Index({super.key, this.initIndex = 0});
   final int initIndex;
   @override
   State<Index> createState() => _IndexState();
 }
 
-class _IndexState extends State<Index> {
+class _IndexState extends State<Index> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -33,11 +33,34 @@ class _IndexState extends State<Index> {
         loadMorePosts();
       }
     });
+    WidgetsBinding.instance.addObserver(this);
+    FirebaseController.changeStatusUser(true);
   }
 
   loadMorePosts() async {
     final postProvider = Provider.of<PostProvider>(context, listen: false);
     postProvider.getPosts();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        FirebaseController.changeStatusUser(true);
+        break;
+      case AppLifecycleState.paused:
+        FirebaseController.changeStatusUser(false);
+        break;
+      default:
+        break;
+    }
   }
 
   ScrollController _scrollController = ScrollController();
@@ -57,7 +80,12 @@ class _IndexState extends State<Index> {
         height: 300,
         color: Colors.amber.withOpacity(.1),
         child: MyButton(
-          onPressed: () {},
+          onPressed: () async {
+            // await NotificationHelper.simpleNotification(
+            //     title: "Aos moiws", body: "Hello");
+            FCMService.sendNotification(
+                receiverToken: deviceToken, body: "ad", title: "sdd");
+          },
         ),
       ),
       ChatHomeScreen(),
@@ -125,6 +153,11 @@ class _IndexState extends State<Index> {
                     ),
                   ],
                   bottom: TabBar(
+                    // indicator: BoxDecoration(
+                    //   color: myColor,
+                    //   borderRadius: BorderRadius.circular(15),
+                    // ),
+                    indicatorWeight: 5,
                     tabs: _icons
                         .map((IconData iconData) => Tab(
                               icon: Icon(iconData),
@@ -199,6 +232,7 @@ class _BodyState extends State<Hearder> {
                   fontSize: 13,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 12,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
                 ),
               ),
             ),
@@ -209,6 +243,7 @@ class _BodyState extends State<Hearder> {
                   fontSize: 8,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 3,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
                 ),
               ),
             ),

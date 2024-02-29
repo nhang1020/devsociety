@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:devsociety/config/ImageHelper.dart';
 import 'package:devsociety/provider/PostProvider.dart';
@@ -18,11 +17,7 @@ class PageChooseImage extends StatefulWidget {
 
 class _PageChooseImageState extends State<PageChooseImage> {
   List<File> images = [];
-  Uint8List? imageList;
-  Future<File> uint8ListToFile(Uint8List uint8list, String filePath) async {
-    File file = await uint8ListToFile(uint8list, filePath);
-    return file;
-  }
+
 
   Future<void> chooseImage({bool multiple = false}) async {
     var files = await ImageHelper().pickImageByGallery(mutiple: multiple);
@@ -195,12 +190,7 @@ class _PageChooseImageState extends State<PageChooseImage> {
                   ],
                 )
               : SizedBox(),
-          imageList != null
-              ? Image.memory(
-                  imageList!,
-                  fit: BoxFit.cover,
-                )
-              : SizedBox(),
+          
           SizedBox(height: 30),
         ],
       ),

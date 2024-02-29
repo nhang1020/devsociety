@@ -45,4 +45,20 @@ class PostController {
       return listPosts;
     }
   }
+
+  Future<bool> deletePost(int id) async {
+    try {
+      var response = await http.delete(
+        Uri.parse("${API.server}/post/$id"),
+        headers: API.headerContentTypes(LocalPreference.token),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print("->$e");
+      return false;
+    }
+  }
 }

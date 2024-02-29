@@ -1,6 +1,11 @@
+import 'package:devsociety/models/User.dart';
+import 'package:devsociety/provider/UserProvider.dart';
+import 'package:devsociety/views/components/myImage.dart';
 import 'package:devsociety/views/components/textField.dart';
+import 'package:devsociety/views/screens/chat/widgets/chat_room.dart';
 import 'package:devsociety/views/utils/variable.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:unicons/unicons.dart';
 
 class ChatHomeScreen extends StatefulWidget {
@@ -11,18 +16,20 @@ class ChatHomeScreen extends StatefulWidget {
 }
 
 class _ChatHomeScreenState extends State<ChatHomeScreen> {
-  List<String> _images = [
-    "assets/images/2.jpg",
-    "assets/images/3.jpg",
-    "assets/images/4.jpg",
-    "assets/images/5.jpg"
-  ];
-  List<String> _names = [
-    "Ngọc Sang",
-    "Ev. Collapse",
-    "Ngọc Hạnh",
-    "Trường Giang"
-  ];
+  List<User> _listUser = [];
+
+  @override
+  void initState() {
+    super.initState();
+    setListUsers();
+  }
+
+  setListUsers() {
+    setState(() {
+      _listUser = Provider.of<UserProvider>(context, listen: false).listUsers;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,22 +47,34 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
               hintText: "${lang(context).search}",
             ),
           ),
-          for (int index = 0; index < 4; index++)
+          for (var user in _listUser)
             ListTile(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatRoom(user: user),
+                    ));
+              },
               minVerticalPadding: 20,
-              leading: CircleAvatar(
-                radius: 25,
-                foregroundImage: AssetImage(
-                  _images[index],
-                ),
+              leading: Container(
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(shape: BoxShape.circle),
+                width: 50,
+                child: user.avatar != null
+                    ? MyImage(imageUrl: "${user.avatar}", isAvatar: true)
+                    : Image.asset(
+                        'assets/icons/developer_96px.png',
+                        fit: BoxFit.cover,
+                        color: myColor.withOpacity(.5),
+                      ),
               ),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Text(
-                      "${_names[index]}",
+                      "${user.firstname} ${user.lastname}",
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context)
@@ -72,7 +91,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                     displayTime(
                       context,
                       DateTime.now().subtract(
-                        Duration(hours: (index + 1) * 10),
+                        Duration(hours: (2 + 1) * 10),
                       ),
                     ),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
